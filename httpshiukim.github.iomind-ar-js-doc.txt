@@ -1,0 +1,8 @@
+https://hiukim.github.io/mind-ar-js-doc/quick-start/compile
+
+Compile Target Images
+Before working on the webpage, we first need to preprocess (a.k.a. compile) the images. We need to scan the images and extract interesting locations (a.k.a. feature points) so we can detect and track the images later.
+
+This preprocessing step takes time, therefore we want to do it beforehand as to reduce the loading time when users actually use your AR app later.
+
+MindAR comes with a super friendly compilation tool to do this. Image Targets Compiler
