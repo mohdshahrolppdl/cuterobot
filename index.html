@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>WebAR with Sketchfab Embed</title>
+  <title>Cute Robot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-three.prod.js"></script>
@@ -11,12 +11,17 @@
 <body>
   <div id="ar-container"></div>
   <iframe id="model-frame"
-          src="https://sketchfab.com/models/YOUR_MODEL_ID/embed"
+          title="Robot Playground"
+          src="https://sketchfab.com/models/59fc99d8dcb146f3a6c16dbbcc4680da/embed?autostart=1&transparent=1"
           frameborder="0"
-          allow="autoplay; fullscreen; xr-spatial-tracking"
+          allowfullscreen
           mozallowfullscreen="true"
           webkitallowfullscreen="true"
-          allowfullscreen
+          allow="autoplay; fullscreen; xr-spatial-tracking"
+          xr-spatial-tracking
+          execution-while-out-of-viewport
+          execution-while-not-rendered
+          web-share
           style="display:none; position:absolute; width:100vw; height:100vh; top:0; left:0; z-index:10;">
   </iframe>
 
