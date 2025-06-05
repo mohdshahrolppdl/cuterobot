@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WebAR with Sketchfab Embed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-three.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+</head>
+<body>
+  <div id="ar-container"></div>
+  <iframe id="model-frame"
+          src="https://sketchfab.com/models/YOUR_MODEL_ID/embed"
+          frameborder="0"
+          allow="autoplay; fullscreen; xr-spatial-tracking"
+          mozallowfullscreen="true"
+          webkitallowfullscreen="true"
+          allowfullscreen
+          style="display:none; position:absolute; width:100vw; height:100vh; top:0; left:0; z-index:10;">
+  </iframe>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
