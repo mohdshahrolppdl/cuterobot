@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", async () => {
+// main.js
+window.addEventListener("DOMContentLoaded", async () => {
   const mindarThree = new window.MINDAR.IMAGE.MindARThree({
     container: document.querySelector("#ar-container"),
     imageTargetSrc: './assets/targets.mind',
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   await mindarThree.start();
+
   renderer.setAnimationLoop(() => {
     renderer.render(scene, camera);
   });
