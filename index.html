@@ -1,80 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>WebAR with Sketchfab Embed</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- MindAR libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/mindar-image-three.prod.js"></script>
-
+  <meta charset="UTF-8">
+  <title>Sketchfab Model with Marker Target</title>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/mindar-image.prod.js"></script>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/mindar-image-aframe.prod.js"></script>
   <style>
     body, html {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background: black;
+      height: 100%;
     }
-<!-- width: 320px, height: 480px-->
-    
-    #sketchfab-frame {
-      position: fixed;
-      width: 320px; 
-      height: 480px; 
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border: none;
+    .sketchfab-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       display: none;
       z-index: 10;
     }
-
-    canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+    .sketchfab-overlay iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
   </style>
 </head>
 <body>
 
-  <iframe id="sketchfab-frame"
+<!-- Sketchfab iframe overlay that will appear when marker is detected -->
+<div id="sketchfabContainer" class="sketchfab-overlay">
+  <iframe 
+    title="Robot Playground"
     src="https://sketchfab.com/models/59fc99d8dcb146f3a6c16dbbcc4680da/embed?autostart=1&transparent=1"
     allow="autoplay; fullscreen; xr-spatial-tracking"
+    xr-spatial-tracking
     allowfullscreen
-    title="Robot Playground">
+    webkitallowfullscreen
+    mozallowfullscreen>
   </iframe>
+</div>
 
-  <script>
-    const start = async () => {
-      const mindarThree = new window.MINDAR.IMAGE.MindARThree({
-        container: document.body,
-        imageTargetSrc: "./assets/targets.mind",
-        maxTrack: 1
-      });
+<!-- AR Scene -->
+<a-scene mindar-image="imageTargetSrc: ./assets/targets.mind;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
 
-      const { renderer, scene, camera } = mindarThree;
+  <a-assets></a-assets>
 
-      // Dummy anchor to trigger detection
-      const anchor = mindarThree.addAnchor(0);
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      // Show iframe when detected
-      anchor.onTargetFound = () => {
-        document.getElementById('sketchfab-frame').style.display = 'block';
-      };
-      anchor.onTargetLost = () => {
-        document.getElementById('sketchfab-frame').style.display = 'none';
-      };
+  <a-entity mindar-image-target="targetIndex: 0" id="markerAnchor">
+    <!-- Just a placeholder object to trigger marker visibility -->
+    <a-box visible="false" width="0.5" height="0.5" depth="0.1" color="red"></a-box>
+  </a-entity>
 
-      await mindarThree.start();
+</a-scene>
 
-      renderer.setAnimationLoop(() => {
-        renderer.render(scene, camera);
-      });
-    };
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const sketchfabContainer = document.getElementById("sketchfabContainer");
+    const sceneEl = document.querySelector("a-scene");
 
-    start();
-  </script>
+    sceneEl.addEventListener("targetFound", () => {
+      sketchfabContainer.style.display = "block";
+    });
+
+    sceneEl.addEventListener("targetLost", () => {
+      sketchfabContainer.style.display = "none";
+    });
+  });
+</script>
+
 </body>
 </html>
