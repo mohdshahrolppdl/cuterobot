@@ -2,88 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interactive Robot Playground</title>
+  <title>Sketchfab Model in Web AR (GitHub Pages)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.0/dist/mindar-image.prod.js"></script>
   <style>
-    body {
+    body, html {
+      margin: 0; padding: 0; overflow: hidden;
+      height: 100vh;
+      background: black;
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
     }
-
-    .sketchfab-embed-wrapper {
-      max-width: 1000px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    #container {
+      position: relative;
+      width: 100vw; height: 100vh;
     }
-
-    iframe {
-      width: 100%;
-      height: 600px;
+    #sketchfab-frame {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 320px; height: 480px;
+      transform: translate(-50%, -50%);
       border: none;
-      border-radius: 6px;
-    }
-
-    .sketchfab-embed-wrapper p {
-      font-size: 13px;
-      margin: 5px;
-      color: #4A4A4A;
-    }
-
-    .sketchfab-embed-wrapper a {
-      font-weight: bold;
-      color: #1CAAD9;
-      text-decoration: none;
-    }
-
-    .sketchfab-embed-wrapper a:hover {
-      text-decoration: underline;
-    }
-
-    .note {
-      font-size: 14px;
-      margin-top: 10px;
-      color: #333;
-      text-align: center;
+      display: none; /* hidden initially */
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 10;
+      background: white;
     }
   </style>
 </head>
 <body>
-  <div class="sketchfab-embed-wrapper">
+
+  <div id="container">
+    <video id="video" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+
     <iframe
-      title="Robot Playground"
-      allowfullscreen
-      mozallowfullscreen="true"
-      webkitallowfullscreen="true"
+      id="sketchfab-frame"
+      src="https://sketchfab.com/models/59fc99d8dcb146f3a6c16dbbcc4680da/embed?autostart=1&transparent=1"
       allow="autoplay; fullscreen; xr-spatial-tracking"
-      xr-spatial-tracking
-      execution-while-out-of-viewport
-      execution-while-not-rendered
-      web-share
-      src="https://sketchfab.com/models/59fc99d8dcb146f3a6c16dbbcc4680da/embed?autostart=1&transparent=1">
-    </iframe>
-    <div class="note">
-      🌀 Use your mouse or touch to rotate, zoom, and move the 3D model.
-    </div>
+      allowfullscreen
+      title="Robot Playground"
+    ></iframe>
   </div>
 
-  <!-- Put your scripts just before </body> -->
   <script>
-    // Example JavaScript loading your targets.mind
-    const targetFilePath = 'assets/targets.mind';
-
-    // Your code to load or initialize the AR target
-    // For example, using a hypothetical AR library:
-    AR.initialize({
-      targetFile: targetFilePath,
-      onReady: () => {
-        console.log('AR target loaded and ready!');
-      }
+    // Initialize MindAR
+    const mindarThree = new window.MINDAR.Image.MindARThree({
+      container: document.body,
+      imageTargetSrc: "assets/targets.mind",
+      uiLoading: "no",
+      uiScanning: "no",
+      uiError: "no",
+      maxTrack: 1,
     });
+
+    const startAR = async () => {
+      const {renderer, scene, camera} = mindarThree;
+      await mindarThree.start();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      // Show the Sketchfab iframe when target detected, hide otherwise
+      mindarThree.onTargetFound = () => {
+        document.getElementById('sketchfab-frame').style.display = 'block';
+      }
+      mindarThree.onTargetLost = () => {
+        document.getElementById('sketchfab-frame').style.display = 'none';
+      }
+
+      const animate = () => {
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    startAR();
   </script>
 </body>
 </html>
