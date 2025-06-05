@@ -1,6 +1,6 @@
 const mindarThree = new window.MINDAR.IMAGE.MindARThree({
   container: document.querySelector("#ar-container"),
-  imageTargetSrc: './assets/marker.mind',
+  imageTargetSrc: './assets/targets.mind',
 });
 
 const {renderer, scene, camera} = mindarThree;
